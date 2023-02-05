@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.post('/signup', (req, res)=>{
-    res.send('thamks for Subscribing')
+    res.send('Thanks for Subscribing')
 })
 
 app.get("/",(req,res)=>{

@@ -2,23 +2,27 @@ const User = require("../model/user");
 
 exports.userSignUp = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-    if (!name || !email ) {
-      return res.status(400).json({ message: "Please fill all fields." });
+    const { name, email } = req.body;
+
+    if (!name || !email) {
+      return res.status(400).json({ message: "Please provide a name and email." });
     }
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
+
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({ message: "A user with that email already exists." });
     }
-    const user = new User({ name, email});
+
+    const user = new User({ name, email });
     await user.save();
-    
-    res.status(201).json({ message: "User created successfully",});
+
+    res.status(201).json({ message: "User created successfully.", user });
   } catch (error) {
     console.log(error);
-    return res.status(400).json({
-      status: "fail",
-      message: error,
+    return res.status(500).json({
+      message: "An error occurred while creating the user.",
+      error
     });
   }
 };
